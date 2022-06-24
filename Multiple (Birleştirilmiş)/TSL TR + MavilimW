@@ -1,0 +1,60 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © husseyingulen
+
+//@version=5
+
+
+/////////////////////////// tsl tr baslangic
+
+//trailing Stop Loss
+indicator('TSL TR + MavilimW', overlay=true)
+res = input.timeframe(title='Time Frame', defval='D')
+K1 = ta.valuewhen(low > low[1], low[1], 1)
+TSL = request.security(syminfo.tickerid, res, K1)
+plot(TSL, linewidth=2, color=color.new(color.purple, 0), title='TSL')
+
+/////////////////////////// tsl tr bitis
+
+
+/////////////////////////// mavilim baslangic
+
+mavilimold = input(false, title='Show Previous Version of MavilimW?')
+fmal = input(3, 'First Moving Average length')
+smal = input(5, 'Second Moving Average length')
+tmal = fmal + smal
+Fmal = smal + tmal
+Ftmal = tmal + Fmal
+Smal = Fmal + Ftmal
+
+M1 = ta.wma(close, fmal)
+M2 = ta.wma(M1, smal)
+M3 = ta.wma(M2, tmal)
+M4 = ta.wma(M3, Fmal)
+M5 = ta.wma(M4, Ftmal)
+MAVW = ta.wma(M5, Smal)
+col1 = MAVW > MAVW[1]
+col3 = MAVW < MAVW[1]
+colorM = col1 ? color.blue : col3 ? color.red : color.yellow
+
+plot(MAVW, color=colorM, linewidth=2, title='MAVW')
+
+M12 = ta.wma(close, 3)
+M22 = ta.wma(M12, 5)
+M32 = ta.wma(M22, 8)
+M42 = ta.wma(M32, 13)
+M52 = ta.wma(M42, 21)
+MAVW2 = ta.wma(M52, 34)
+
+plot(mavilimold and MAVW2 ? MAVW2 : na, color=color.new(color.blue, 0), linewidth=2, title='MavWOld')
+
+alertcondition(ta.crossover(MAVW, MAVW[1]), title='MAVW BUY', message='MAVW BUY!')
+alertcondition(ta.crossunder(MAVW, MAVW[1]), title='MAVW SELL', message='MAVW SELL!')
+alertcondition(ta.cross(MAVW, MAVW[1]), title='Color ALARM', message='MavilimW has changed color!')
+
+//trailing resistance
+
+plot(ta.valuewhen(high < high[1], high[1], 1), linewidth=3, color=color.new(color.blue, 0))
+
+
+/////////////////////////// mavilim bitis
+
