@@ -2,7 +2,7 @@
 // © husseyingulen
 
 //@version=5
-indicator(title='HG YouWin1 - Cloud + S/R Channel + Key Levels', shorttitle='YouWin1', overlay=true, max_bars_back=1000, max_lines_count=500, max_labels_count=400, max_boxes_count=200)
+indicator(title='HG YouWin1 - Cloud + S/R Channel + Key Levels + Volume Profile', shorttitle='YouWin1', overlay=true, max_bars_back=1000, max_lines_count=500, max_labels_count=400, max_boxes_count=200)
 
 
 /////////////////////////// ma cloud baslangic

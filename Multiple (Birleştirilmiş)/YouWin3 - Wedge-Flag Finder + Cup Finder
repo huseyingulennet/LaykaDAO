@@ -2,7 +2,7 @@
 // © husseyingulen
 
 //@version=5
-indicator(title='HG YouWin3 - Wedge/Flag Finder + Cup Finder + Trend Lines', shorttitle='YouWin3', overlay=true, max_bars_back=500)
+indicator(title='HG YouWin3 - Wedge/Flag Finder + Cup Finder', shorttitle='YouWin3', overlay=true, max_bars_back=500)
 
 
 /////////////////////////// wedge and flag finderbaslama 
@@ -28,7 +28,7 @@ zigzag2Length = input.int(8, step=5, minval=3, title='', group='Zigzag', inline=
 
 showZigZag3 = input.bool(true, title='L3', group='Zigzag', inline='z2')
 zigzag3Length = input.int(13, step=5, minval=3, title='', group='Zigzag', inline='z2')
-
+HG YouWin3 - Wedge/Flag Finder + Cup Finder + Trend Lines
 showZigZag4 = input.bool(true, title='L4', group='Zigzag', inline='z2')
 zigzag4Length = input.int(21, step=5, minval=3, title='', group='Zigzag', inline='z2')
 
@@ -417,172 +417,3 @@ alertcondition(bearish_cup, title='Bearish Cup Found', message='Bearish Cup Foun
 alertcondition(bullish_cup or bearish_cup, title='Cup Found', message='Cup Found, Included:{{plot("included")}}')
 
 /////////////////////////// cup finder bitis
-
-
-/////////////////////////// trend lines baslama
-
-// inputs and definitions {
-
-tf = input.timeframe('', 'Time Frame')
-showTrend = input(false, 'Show Confirmed Trend at Bars')
-showLine = input.bool(true, 'Show Trend Lines', group='Trend Lines')
-linesCount = input.int(3, 'Count of Visible Lines', minval=1, group='Trend Lines')
-extendLine = input.string('Right', 'Extend Lines to', options=['None', 'Left', 'Right', 'Both Sides'], group='Trend Lines')
-
-var trendLines = array.new_line()
-
-//}
-// find high {
-
-isHigh() =>
-    isHigh = false
-    if close < open
-        for i = 1 to 10 by 1
-            if close[i] == open[i]
-                continue
-            else if close[i] > open[i]
-                isHigh := true
-                break
-            else
-                break
-    isHigh
-
-//}
-// determine bar and prices of current and previous high {
-
-var hBar = 0
-var hPrice = 0.
-var hCPrice = 0.
-var prevHBar = 0
-var prevHPrice = 0.
-var prevHCPrice = 0.
-hHigh = request.security(syminfo.tickerid, tf, high)
-hClose1 = request.security(syminfo.tickerid, tf, close[1])
-if request.security(syminfo.tickerid, tf, isHigh())
-    prevHBar := hBar
-    prevHPrice := hPrice
-    prevHCPrice := hCPrice
-    hBar := bar_index
-    hPrice := hHigh
-    hCPrice := hClose1
-    hCPrice
-
-//}
-// find low {
-
-isLow() =>
-    isLow = false
-    if close > open
-        for i = 1 to 10 by 1
-            if close[i] == open[i]
-                continue
-            else if close[i] < open[i]
-                isLow := true
-                break
-            else
-                break
-    isLow
-
-//}
-// determine bar and prices of current and previous low {
-
-var lBar = 0
-var lPrice = 0.
-var lCPrice = 0.
-var prevLBar = 0
-var prevLPrice = 0.
-var prevLCPrice = 0.
-lLow = request.security(syminfo.tickerid, tf, low)
-lClose1 = request.security(syminfo.tickerid, tf, close[1])
-if request.security(syminfo.tickerid, tf, isLow())
-    prevLBar := lBar
-    prevLPrice := lPrice
-    prevLCPrice := lCPrice
-    lBar := bar_index
-    lPrice := lLow
-    lCPrice := lClose1
-    lCPrice
-
-//}
-// determine the trend and the first high or low of the trend line and its price {
-
-var int firstLBar = na
-var int firstHBar = na
-var float firstLPrice = na
-var float firstHPrice = na
-var trend = ''
-lastTrend = trend
-if prevLPrice < lPrice and prevLCPrice < lCPrice and hPrice < request.security(syminfo.tickerid, tf, high) and hCPrice < request.security(syminfo.tickerid, tf, close)
-    if lastTrend != 'u'
-        firstLBar := prevLBar
-        firstLPrice := prevLPrice
-        firstLPrice
-    trend := 'u'
-    trend
-else if prevHPrice > hPrice and prevHCPrice > hCPrice and lPrice > request.security(syminfo.tickerid, tf, low) and lCPrice > request.security(syminfo.tickerid, tf, close)
-    if lastTrend != 'd'
-        firstHBar := prevHBar
-        firstHPrice := prevHPrice
-        firstHPrice
-    trend := 'd'
-    trend
-else if trend == 'u' and (lCPrice > request.security(syminfo.tickerid, tf, close) or request.security(syminfo.tickerid, tf, isHigh()) and prevHCPrice > hCPrice) or trend == 'd' and (hCPrice < request.security(syminfo.tickerid, tf, close) or request.security(syminfo.tickerid, tf, isLow()) and prevLCPrice < lCPrice)
-    trend := ''
-    trend
-
-//}
-// determine the latest high or low of the trend line and its price considering the slope of the line {
-
-var int latestLBar = na
-var int latestHBar = na
-var float latestLPrice = na
-var float latestHPrice = na
-if trend == 'u' and ((lPrice - firstLPrice) / (lBar - firstLBar) < (latestLPrice - firstLPrice) / (latestLBar - firstLBar) or prevLBar == firstLBar)
-    latestLBar := lBar
-    latestLPrice := lPrice
-    latestLPrice
-if trend == 'd' and ((hPrice - firstHPrice) / (hBar - firstHBar) > (latestHPrice - firstHPrice) / (latestHBar - firstHBar) or prevHBar == firstHBar)
-    latestHBar := hBar
-    latestHPrice := hPrice
-    latestHPrice
-
-//}
-// show confirmed trend {
-
-plotshape(showTrend and trend == 'u', style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 0), size=size.tiny)
-plotshape(showTrend and trend == 'd', style=shape.triangledown, location=location.abovebar, color=color.new(color.red, 0), size=size.tiny)
-
-//}
-// show trend lines {
-
-if showLine and trend != ''
-    if trend == lastTrend
-        line.delete(array.pop(trendLines))
-    if trend == 'u'
-        array.push(trendLines, line.new(firstLBar, firstLPrice, latestLBar, latestLPrice, extend=extendLine == 'None' ? extend.none : extendLine == 'Left' ? extend.left : extendLine == 'Right' ? extend.right : extend.both, color=color.green, style=line.style_solid))
-    if trend == 'd'
-        array.push(trendLines, line.new(firstHBar, firstHPrice, latestHBar, latestHPrice, extend=extendLine == 'None' ? extend.none : extendLine == 'Left' ? extend.left : extendLine == 'Right' ? extend.right : extend.both, color=color.red, style=line.style_solid))
-
-//}
-// delete unneeded trend lines {
-
-if array.size(trendLines) > linesCount
-    line.delete(array.shift(trendLines))
-
-//}
-// external output plot {
-
-plot(trend == 'u' ? 1 : trend == 'd' ? -1 : 0, display=display.none)
-
-//}
-
-
-// extra codes for testing purposes {
-//if isHigh()//trend == "d"
-//    label.new(bar_index, 0, "index: " + tostring(bar_index) + " : " + tostring(high) + "\nfirst: " + tostring(firstHBar) + " : " + tostring(firstHPrice) + "\nprev: " + tostring(prevHBar) + " : "  + tostring(prevHPrice) + "\ncurr: " + tostring(hBar) + " : "  + tostring(hPrice) + "\nlatest: " + tostring(latestHBar) + " : "  + tostring(latestHPrice), yloc = yloc.abovebar, color = color.red)
-//if isLow()//trend == "u"
-//    label.new(bar_index, 0, "index: " + tostring(bar_index) + " : " + tostring(low) + "\nfirst: " + tostring(firstLBar) + " : " + tostring(firstLPrice) + "\nprev: " + tostring(prevLBar) + " : "  + tostring(prevLPrice) + "\ncurr: " + tostring(lBar) + " : "  + tostring(lPrice) + "\nlatest: " + tostring(latestLBar) + " : "  + tostring(latestLPrice), yloc = yloc.belowbar, color = color.green, style = label.style_label_up)
-//label.new(bar_index, 0, tostring(array.size(trendLines)), yloc = yloc.abovebar)
-//}
-
-/////////////////////////// trend lines bitis
