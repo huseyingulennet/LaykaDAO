@@ -698,123 +698,89 @@ alertcondition(neg_reg_div_detected or neg_hid_div_detected, title='Negative Div
 /////////////////////////// divergence bitis
 
 
-/////////////////////////// trend lines baslama
+/////////////////////////// trend line baslama
 
-srch = input(high, 'Highs Source', group='=== TREND LINES ===')
-srcl = input(low, 'Lows Source', group='=== TREND LINES ===')
-mn = input.int(21, 'Short Range', minval=1, group='=== TREND LINES ===')
-F = input.int(5, 'Long Range Factor', minval=2, group='=== TREND LINES ===')
+srch = input(high, 'Highs Source')
+srcl = input(low, 'Lows Source')
+mn = input.int(21, 'Short Range', minval=1)
+F = input.int(5, 'Long Range Factor', minval=2)
 mx = math.min(mn * F, 300)  // necessary to avoid PineScript's hardcoded iteration-limit on looped code
 mn := math.floor(mx / F)
-of = input.int(0, 'Offset', minval=0, group='=== TREND LINES ===')
-mx += of
-mn += of
-nr = input.int(2, 'Noise Reduction', minval=0, group='=== TREND LINES ===')
-sm = nr + 1
-exp = input(false, 'Use logarithmic scale', group='=== TREND LINES ===')
-sr = input(true, 'Show Resistance (Red)', group='=== TREND LINES ===')
-ss = input(true, 'Show Support (Green)', group='=== TREND LINES ===')
-sa = input(true, 'Show Average (Yellow)', group='=== TREND LINES ===')
-rl = input(true, 'Show Reference Lines', group='=== TREND LINES ===')
-cr = input(false, 'Show Criss-cross', group='=== TREND LINES ===')
-tl = input(false, 'Show Trace Lines', group='=== TREND LINES ===')
+sr = input(true, 'Show Resistance (Red)')
+ss = input(true, 'Show Support (Green)')
+sa = input(true, 'Show Average (Yellow)')
+Xl = input(true, 'Extend Left')
+Xr = input(true, 'Extend Right')
 
-SRCH = ta.ema(srch, sm)
-SRCL = ta.ema(srcl, sm)
+XT = Xl and Xr ? extend.both : Xl ? extend.left : Xr ? extend.right : extend.none
 
 gap = 2
 
+V = open < close ? volume : -volume
 hhh = 0.0
-lll = 1000000000000.0
-
-mx4 = 100
+lll = 1000000000000000000.0
 
 h2 = hhh
 th2 = 0
+vh2 = hhh
 l2 = lll
 tl2 = 0
+vl2 = lll
 h1 = hhh
 th1 = 0
+vh1 = hhh
 l1 = lll
 tl1 = 0
-for i = of to mx by 1
-    if i > mn - gap  // find closest high and low
-        h2 := math.max(h2, SRCH[i])
-        if h2 == SRCH[i]
+vl1 = lll
+for i = 0 to mx by 1
+    if i > mn - gap
+        vh2 := math.max(vh2, V[i])
+        if vh2 == V[i]
             th2 := i
-            th2
-        l2 := math.min(l2, SRCL[i])
-        if l2 == SRCL[i]
+            h2 := srch[i]
+            h2
+        vl2 := math.min(vl2, V[i])
+        if vl2 == V[i]
             tl2 := i
-            tl2
+            l2 := srcl[i]
+            l2
 
-    if i < mn + gap  // find farthest high and low
-        h1 := math.max(h1, SRCH[i])
-        if h1 == SRCH[i]
+    if i < mn + gap
+        vh1 := math.max(vh1, V[i])
+        if vh1 == V[i]
             th1 := i
-            th1
-        l1 := math.min(l1, SRCL[i])
-        if l1 == SRCL[i]
+            h1 := srch[i]
+            h1
+        vl1 := math.min(vl1, V[i])
+        if vl1 == V[i]
             tl1 := i
-            tl1
+            l1 := srcl[i]
+            l1
 
 a1 = math.avg(h1, l1)
 ta1 = math.round(math.avg(th1, tl1))
 a2 = math.avg(h2, l2)
 ta2 = math.round(math.avg(th2, tl2))
 
-PLT(P1, P2, T1, T2) =>
-    if exp
-        t = T1 - T2
-        slope = (math.log10(P1) - math.log10(P2)) / (0 - t)
-        y = slope * T1 + math.log10(P1)
-        math.pow(10, y)
-    else
-        (P2 - P1) / (T1 - T2) * T2 + P2
-
-PLC = (barstate.islast or tl) and of == 0
-
-PLTh = PLC ? PLT(h1, h2, th1, th2) : na
-PLTl = PLC ? PLT(l1, l2, tl1, tl2) : na
-PLTa = PLC ? PLT(a1, a2, ta1, ta2) : na
-
-sty = tl ? plot.style_stepline : plot.style_circles
-lin = tl ? 1 : 2
-
-plot(PLTh, 'Res', color=color.new(#ff0088, 0), style=sty, linewidth=lin)
-plot(PLTa, 'Avg', color=color.new(#ffff00, 0), style=sty, linewidth=lin)
-plot(PLTl, 'Sup', color=color.new(#00ff88, 0), style=sty, linewidth=lin)
-
-bgcolor(close > PLTh ? color.new(#ff0088, 95) : color.new(#ff0088, 100), title='Close over Resistance', transp=90)
-bgcolor(close < PLTl ? color.new(#00ff88, 95) : color.new(#00ff88, 100), title='Close under Support', transp=90)
-
 L(T1, H1, T2, H2, CLR, W, X) =>
-    line.new(bar_index - math.max(T1, 0), H1, bar_index - math.max(T2, 0), H2, color=CLR, width=W, extend=X ? extend.both : extend.none)
+    line.new(bar_index - T1, H1, bar_index - T2, H2, color=CLR, width=W, extend=X ? XT : extend.none)
 
-if sr
-    L1b = L(th1, h1, th2, h2, #ff0088, 1, true)
-    line.delete(L1b[1])
-    if rl
-        L1a = L(th1, h1, th2, h2, #ff0088, 3, false)
+if barstate.islast
+    if sr
+        L1a = L(th1, h1, th2, h2, #ff0088, 5, false)
         line.delete(L1a[1])
-if ss
-    L2b = L(tl1, l1, tl2, l2, #00ff88, 1, true)
-    line.delete(L2b[1])
-    if rl
-        L2a = L(tl1, l1, tl2, l2, #00ff88, 3, false)
+        L1b = L(th1, h1, th2, h2, #ff0088, 1, true)
+        line.delete(L1b[1])
+    if ss
+        L2a = L(tl1, l1, tl2, l2, #00ff88, 5, false)
         line.delete(L2a[1])
-if sa
-    L3b = L(ta1, a1, ta2, a2, #ffff00, 1, true)
-    line.delete(L3b[1])
-    if rl
-        L3a = L(ta1, a1, ta2, a2, #ffff00, 3, false)
+        L2b = L(tl1, l1, tl2, l2, #00ff88, 1, true)
+        line.delete(L2b[1])
+    if sa
+        L3a = L(ta1, a1, ta2, a2, #ffff00, 5, false)
         line.delete(L3a[1])
-if cr
-    L4b = L(th1, h1, tl2, l2, #cccccc, 1, false)
-    line.delete(L4b[1])
-    L5b = L(tl1, l1, th2, h2, #cccccc, 1, false)
-    line.delete(L5b[1])
+        L3b = L(ta1, a1, ta2, a2, #ffff00, 1, true)
+        line.delete(L3b[1])
 
 
-
-/////////////////////////// trend lines bitis
+/////////////////////////// trend line bitis
