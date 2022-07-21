@@ -2,7 +2,7 @@
 // © husseyingulen
 
 //@version=5
-indicator(title='HG YouWin2 - OB/RB/FVG Finder + Divergences + Trend Lines', shorttitle='YouWin2', overlay=true, max_lines_count=500, max_labels_count=500, max_bars_back=2000)
+indicator(title='LaykaDAO-2 - OB/RB/FVG Finder + Divergences + Trend Lines', shorttitle='LaykaDAO-2', overlay=true, max_lines_count=500, max_labels_count=500, max_bars_back=2000)
 
 
 /////////////////////////// order block finder bslangic
@@ -36,8 +36,8 @@ rjbMaxBoxSet = input.int(defval=10, title='Maximum RJB Box Displayed', minval=1,
 filterMitRJB = input.bool(defval=true, title='Custom Color Mitigated RJB', group='Rejection Blocks')
 mitRJBColor = input.color(defval=color.new(color.gray, 95), title='Mitigated RJB Color', group='Rejection Blocks', inline='Set Custom Color Mit RJB', tooltip='Set to 100 to make mitigated RJB disappear')
 
-plotPVT = input.bool(defval=false, title='Plot Pivots', group='Pivots')
-pivotLookup  = input.int(defval=2, minval=1, maxval=5,title='Pivot Lookup', group='Pivots', tooltip='Minimum = 1, Maximum = 5')
+plotPVT = input.bool(defval=true, title='Plot Pivots', group='Pivots')
+pivotLookup  = input.int(defval=5, minval=1, maxval=5,title='Pivot Lookup', group='Pivots', tooltip='Minimum = 1, Maximum = 5')
 pvtTopColor = input.color(defval=color.new(color.silver, 0), title='Pivot Top Color', group='Pivots', inline='PVT Color')
 pvtBottomColor = input.color(defval=color.new(color.silver, 0), title='Pivot Bottom Color', group='Pivots', inline='PVT Color')
 

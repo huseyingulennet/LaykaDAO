@@ -2,7 +2,7 @@
 // © husseyingulen
 
 //@version=5
-indicator(title='HG YouWin3 - Wedge/Flag Finder + Cup Finder', shorttitle='YouWin3', overlay=true, max_bars_back=500)
+indicator(title='LaykaDAO-3 - Wedge/Flag Finder + Cup Finder', shorttitle='LaykaDAO-3', overlay=true, max_bars_back=500)
 
 
 /////////////////////////// wedge and flag finderbaslama 
@@ -28,7 +28,7 @@ zigzag2Length = input.int(8, step=5, minval=3, title='', group='Zigzag', inline=
 
 showZigZag3 = input.bool(true, title='L3', group='Zigzag', inline='z2')
 zigzag3Length = input.int(13, step=5, minval=3, title='', group='Zigzag', inline='z2')
-HG YouWin3 - Wedge/Flag Finder + Cup Finder + Trend Lines
+
 showZigZag4 = input.bool(true, title='L4', group='Zigzag', inline='z2')
 zigzag4Length = input.int(21, step=5, minval=3, title='', group='Zigzag', inline='z2')
 
@@ -416,4 +416,4 @@ alertcondition(bullish_cup, title='Bullish Cup Found', message='Bullish Cup Foun
 alertcondition(bearish_cup, title='Bearish Cup Found', message='Bearish Cup Found, Included:{{plot("included")}}')
 alertcondition(bullish_cup or bearish_cup, title='Cup Found', message='Cup Found, Included:{{plot("included")}}')
 
-/////////////////////////// cup finder bitis
+/////////////////////////// cup finder bitiss
