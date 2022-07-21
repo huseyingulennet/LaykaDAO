@@ -2,7 +2,7 @@
 // © husseyingulen
 
 //@version=5
-indicator(title='HG YouWin1 - Cloud + S/R Channel + Key Levels + Volume Profile', shorttitle='YouWin1', overlay=true, max_bars_back=1000, max_lines_count=500, max_labels_count=400, max_boxes_count=200)
+indicator(title='HG YouWin1 - Cloud + S/R Channel + Key Levels', shorttitle='YouWin1', overlay=true, max_bars_back=1000, max_lines_count=500, max_labels_count=400, max_boxes_count=200)
 
 
 /////////////////////////// ma cloud baslangic
@@ -654,7 +654,7 @@ for x = 0 to math.min(9, maxnumsr) by 1
     box.delete(array.get(srchannels, x))
     srcol = get_color(x * 2)
     if not na(srcol)
-        array.set(srchannels, x, box.new(left=bar_index, top=get_level(x * 2), right=bar_index + 1, bottom=get_level(x * 2 + 1), border_color=srcol, border_width=0, extend=extend.both, bgcolor=srcol))
+        array.set(srchannels, x, box.new(left=bar_index, top=get_level(x * 2), right=bar_index + 1, bottom=get_level(x * 2 + 1), border_color=srcol, border_width=0, extend=extend.left, bgcolor=srcol))
 
 resistancebroken = false
 supportbroken = false
@@ -1044,9 +1044,9 @@ f_create_level("eq", new_H4, not new_H4, global_eq_array, inp_prev_H4_col, inp_p
 venbl = input.bool(group='=== VOLUME PROFILE ===', title="Show Volume Profile?", defval=true)
 vp_poc_show = input.bool(group='=== VOLUME PROFILE ===', title='Show POC Line', defval=true)
 vp_lookback = input.int(group='=== VOLUME PROFILE ===', title='Volume Lookback Depth [10-1000]', defval=200, minval=10, maxval=1000)
-vp_max_bars = input.int(group='=== VOLUME PROFILE ===', title='Number of Bars [10-500]', defval=100, minval=10, maxval=500)
-vp_bar_mult = input.int(group='=== VOLUME PROFILE ===', title='Bar Length Multiplier [10-100]', defval=30, minval=10, maxval=100)
-vp_bar_offset = input.int(group='=== VOLUME PROFILE ===', title='Bar Horizontal Offset [0-100]', defval=70, minval=0, maxval=100)
+vp_max_bars = input.int(group='=== VOLUME PROFILE ===', title='Number of Bars [10-500]', defval=200, minval=10, maxval=500)
+vp_bar_mult = input.int(group='=== VOLUME PROFILE ===', title='Bar Length Multiplier [10-100]', defval=70, minval=10, maxval=100)
+vp_bar_offset = input.int(group='=== VOLUME PROFILE ===', title='Bar Horizontal Offset [0-100]', defval=100, minval=0, maxval=100)
 vp_bar_width = input.int(group='=== VOLUME PROFILE ===', title='Bar Width [1-20]', defval=2, minval=1, maxval=20)
 vp_delta_type = input.string(group='=== VOLUME PROFILE ===', title='Delta Type', defval='Both', options=['Both', 'Bullish', 'Bearish'])
 
