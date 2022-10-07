@@ -22,7 +22,7 @@
 // ╚══════════════════════════════════════╝
 
 
-// v3 Style Gradient
+// v3 Style Gradient 
 GRN01 = #7CFC00, GRN02 = #32CD32, GRN03 = #228B22, GRN04 = #006400, GRN05 = #008000, GRN06=#093507
 RED01 = #FF4500, RED02 = #FF0000, RED03 = #B22222, RED04 = #8B0000, RED05 = #800000, RED06=#330d06
 
@@ -239,7 +239,7 @@ alertcondition(conditionMedium and open < close, title='Up Medium Vol', message=
 alertcondition(conditionMedium and open > close, title='Down Medium Vol', message='Down Bar Medium Volume Threshold')
 
 
-   ╔══════════════════════════════════════════════════════════════════════════════╗
+// ╔══════════════════════════════════════════════════════════════════════════════╗
 // ║                                                                              ║
 // ║     main finish (heatmap volume)                                             ║
 // ║                                                                              ║
