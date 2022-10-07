@@ -8,9 +8,11 @@
 // ║ RSI Candle                                                                   ║
 // ║ Key Levels                                                                   ║
 // ║ Imbalance                                                                    ║
+// ║ Higher High                                                                  ║
 // ║                                                                              ║
 // ║ developer : husseyingulen                                                    ║    
-// ║ creators  : mrsebqstianc, spaceman, glaz, travelling_trader                  ║
+// ║ creators  : mrsebqstianc, spaceman, glaz, travelling_trader,                 ║
+// ║             LonesomeThecolor.blue                                            ║
 // ║                                                                              ║
 // ║ This source code is subject to the terms of the Mozilla Public License 2.0   ║
 // ║ at https://mozilla.org/MPL/2.0/                                              ║
@@ -55,7 +57,7 @@ WHITE   = #FFFFFF
 // ╚══════════════════════════════════════╝
 
 
-indicator(title='MA Cross - RSI Candle - Key Levels - Imbalance', overlay=true, max_lines_count=500, max_boxes_count=500)
+indicator(title='MA Cross - RSI Candle - Key Levels - Imbalance - Higher High', overlay=true, max_lines_count=500, max_boxes_count=500)
 
 
 // ╔══════════════════════════════════════════════════════════════════════════════╗
@@ -64,11 +66,11 @@ indicator(title='MA Cross - RSI Candle - Key Levels - Imbalance', overlay=true, 
 // ║                                                                              ║
 // ╚══════════════════════════════════════════════════════════════════════════════╝
 
-s3 = input.string(title='MA Type 3', defval='SMA', options=['na', 'SMA', 'EMA', 'WMA', 'RMA'])
+s3 = input.string(title='MA Type 3', defval='na', options=['na', 'SMA', 'EMA', 'WMA', 'RMA'])
 len3 = input.int(20, minval=1, title='Length 3')
 res3 = input.timeframe(title='Resolution 3', defval='D')
 src3 = input(close, title='Source 3')
-s4 = input.string(title='MA Type4', defval='SMA', options=['na', 'SMA', 'EMA', 'WMA', 'RMA'])
+s4 = input.string(title='MA Type4', defval='na', options=['na', 'SMA', 'EMA', 'WMA', 'RMA'])
 len4 = input.int(50, minval=1, title='Length 4')
 res4 = input.timeframe(title='Resolution 4', defval='D')
 src4 = input(close, title='Source 4')
@@ -188,14 +190,14 @@ barcolor(isup() ? color.yellow : isdown_1 ? color.yellow : na)
 displayStyle = input.string(defval='Standard', title='Display Style', options=['Standard', 'Right Anchored'], inline='Display')
 mergebool = input.bool(defval=true, title='Merge Levels?', inline='Display')
 distanceright = input.int(defval=15, title='Distance', minval=5, maxval=500, inline='Dist')
-radistance = input.int(defval=250, title='Anchor Distance', minval=5, maxval=500, inline='Dist')
+radistance = input.int(defval=50, title='Anchor Distance', minval=5, maxval=500, inline='Dist')
 labelsize = input.string(defval='Medium', title='Text Size', options=['Small', 'Medium', 'Large'])
 linesize = input.string(defval='Small', title='Line Width', options=['Small', 'Medium', 'Large'], inline='Line')
 linestyle = input.string(defval='Solid', title='Line Style', options=['Solid', 'Dashed', 'Dotted'], inline='Line')
 
 
 
-GlobalTextType = input.bool(defval=false, title='Global Text ShortHand', tooltip='Enable for shorthand text on all text')
+GlobalTextType = input.bool(defval=true, title='Global Text ShortHand', tooltip='Enable for shorthand text on all text')
 var globalcoloring = input.bool(defval=false, title='Global Coloring', tooltip='Enable for all color controls via one color', inline='GC')
 GlobalColor = input.color(title='', defval=color.white, inline='GC')
 //var show_tails = input(defval = false, title = "Always Show", type = input.bool)
@@ -269,8 +271,8 @@ var is_quarterlyrange_enabled = input.bool(defval=false, title='Prev H/L', group
 var is_quarterly_mid = input.bool(defval=false, title='Prev Mid', group='Quarterly', inline='Quarterly')
 QuarterlyTextType = input.bool(defval=false, title='ShortHand', group='Quarterly', inline='Quarterlysh')
 
-var is_yearly_enabled = input.bool(defval=true, title='Open', group='Yearly', inline='Yearly')
-var is_yearlyrange_enabled = input.bool(defval=true, title='Current H/L', group='Yearly', inline='Yearly')
+var is_yearly_enabled = input.bool(defval=false, title='Open', group='Yearly', inline='Yearly')
+var is_yearlyrange_enabled = input.bool(defval=false, title='Current H/L', group='Yearly', inline='Yearly')
 var is_yearly_mid = input.bool(defval=false, title='Mid', group='Yearly', inline='Yearly')
 YearlyTextType = input.bool(defval=false, title='ShortHand', group='Yearly', inline='Yearlysh')
 
@@ -285,7 +287,7 @@ Londont = input.session("0800-1600", "London Session")
 USt = input.session("1400-2100", "New York Session")
 Asiat = input.session("0000-0900", "Tokyo Session")
 
-DailyColor = input.color(title='', defval=#009688, group='Daily', inline='Dailysh')
+DailyColor = input.color(title='', defval=#000000, group='Daily', inline='Dailysh')
 MondayColor = input.color(title='', defval=#da00ff, group='Monday Range', inline='Mondaysh')
 WeeklyColor = input.color(title='', defval=#2196F3, group='Weekly', inline='Weeklysh')
 MonthlyColor = input.color(title='', defval=#2196F3, group='Monthly', inline='Monthlysh')
@@ -1390,7 +1392,7 @@ var box[]   bottom_boxes     = array.new_box()
 var box[]   tested_obs = array.new_box()
 var bool matched = false
 
-color imb = color.new(color.yellow,70)
+color imb = color.new(#630cff,70)
 color imb_tested = color.new(color.red,60)
 
 tf = timeframe.isdaily ? 1440 : (timeframe.isweekly ? 1440*7 : (timeframe.ismonthly ? 1440*7*30 : 1))
@@ -1494,6 +1496,138 @@ if barstate.isconfirmed
 // ║                                                                              ║
 // ╚══════════════════════════════════════════════════════════════════════════════╝
 
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                              ║
+// ║     main start (higher high)                                          ║
+// ║                                                                              ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+
+lb = input.int(5, title='Left Bars', minval=1)
+rb = input.int(5, title='Right Bars', minval=1)
+showsupres = input.bool(true, title='Support/Resistance', inline='srcol')
+supcol = input.color(color.lime, title='', inline='srcol')
+rescol = input.color(color.red, title='', inline='srcol')
+srlinestyle = input.string(line.style_dotted, title='Line Style/Width', options=[line.style_solid, line.style_dashed, line.style_dotted], inline='style')
+srlinewidth = input.int(1, title='', minval=1, maxval=5, inline='style')
+changebarcol = input.bool(false, title='Change Bar Color', inline='bcol')
+bcolup = input.color(color.blue, title='', inline='bcol')
+bcoldn = input.color(color.black, title='', inline='bcol')
+
+ph = ta.pivothigh(lb, rb)
+pl = ta.pivotlow(lb, rb)
+
+iff_1 = pl ? -1 : na  // Trend direction
+hl = ph ? 1 : iff_1
+iff_2 = pl ? pl : na  // similar to zigzag but may have multiple highs/lows
+zz = ph ? ph : iff_2
+valuewhen_1 = ta.valuewhen(hl, hl, 1)
+valuewhen_2 = ta.valuewhen(zz, zz, 1)
+zz := pl and hl == -1 and valuewhen_1 == -1 and pl > valuewhen_2 ? na : zz
+valuewhen_3 = ta.valuewhen(hl, hl, 1)
+valuewhen_4 = ta.valuewhen(zz, zz, 1)
+zz := ph and hl == 1 and valuewhen_3 == 1 and ph < valuewhen_4 ? na : zz
+
+valuewhen_5 = ta.valuewhen(hl, hl, 1)
+valuewhen_6 = ta.valuewhen(zz, zz, 1)
+hl := hl == -1 and valuewhen_5 == 1 and zz > valuewhen_6 ? na : hl
+valuewhen_7 = ta.valuewhen(hl, hl, 1)
+valuewhen_8 = ta.valuewhen(zz, zz, 1)
+hl := hl == 1 and valuewhen_7 == -1 and zz < valuewhen_8 ? na : hl
+zz := na(hl) ? na : zz
+
+findprevious() =>  // finds previous three points (b, c, d, e)
+    ehl = hl == 1 ? -1 : 1
+    loc1 = 0.0
+    loc2 = 0.0
+    loc3 = 0.0
+    loc4 = 0.0
+    xx = 0
+    for x = 1 to 1000 by 1
+        if hl[x] == ehl and not na(zz[x])
+            loc1 := zz[x]
+            xx := x + 1
+            break
+    ehl := hl
+    for x = xx to 1000 by 1
+        if hl[x] == ehl and not na(zz[x])
+            loc2 := zz[x]
+            xx := x + 1
+            break
+    ehl := hl == 1 ? -1 : 1
+    for x = xx to 1000 by 1
+        if hl[x] == ehl and not na(zz[x])
+            loc3 := zz[x]
+            xx := x + 1
+            break
+    ehl := hl
+    for x = xx to 1000 by 1
+        if hl[x] == ehl and not na(zz[x])
+            loc4 := zz[x]
+            break
+    [loc1, loc2, loc3, loc4]
+
+float a = na
+float b = na
+float c = na
+float d = na
+float e = na
+if not na(hl)
+    [loc1, loc2, loc3, loc4] = findprevious()
+    a := zz
+    b := loc1
+    c := loc2
+    d := loc3
+    e := loc4
+    e
+
+_hh = zz and a > b and a > c and c > b and c > d
+_ll = zz and a < b and a < c and c < b and c < d
+_hl = zz and (a >= c and b > c and b > d and d > c and d > e or a < b and a > c and b < d)
+_lh = zz and (a <= c and b < c and b < d and d < c and d < e or a > b and a < c and b > d)
+
+plotshape(_hl, text='HL', title='Higher Low', style=shape.labelup, color=color.new(color.lime, 0), textcolor=color.new(color.black, 0), location=location.belowbar, offset=-rb)
+plotshape(_hh, text='HH', title='Higher High', style=shape.labeldown, color=color.new(color.lime, 0), textcolor=color.new(color.black, 0), location=location.abovebar, offset=-rb)
+plotshape(_ll, text='LL', title='Lower Low', style=shape.labelup, color=color.new(color.red, 0), textcolor=color.new(color.white, 0), location=location.belowbar, offset=-rb)
+plotshape(_lh, text='LH', title='Lower High', style=shape.labeldown, color=color.new(color.red, 0), textcolor=color.new(color.white, 0), location=location.abovebar, offset=-rb)
+
+float res = na
+float sup = na
+res := _lh ? zz : res[1]
+sup := _hl ? zz : sup[1]
+
+int trend = na
+iff_3 = close < sup ? -1 : nz(trend[1])
+trend := close > res ? 1 : iff_3
+
+res := trend == 1 and _hh or trend == -1 and _lh ? zz : res
+sup := trend == 1 and _hl or trend == -1 and _ll ? zz : sup
+rechange = res != res[1]
+suchange = sup != sup[1]
+
+var line resline = na
+var line supline = na
+if showsupres
+    if rechange
+        line.set_x2(resline, bar_index)
+        line.set_extend(resline, extend=extend.none)
+        resline := line.new(x1=bar_index - rb, y1=res, x2=bar_index, y2=res, color=rescol, extend=extend.right, style=srlinestyle, width=srlinewidth)
+        resline
+
+    if suchange
+        line.set_x2(supline, bar_index)
+        line.set_extend(supline, extend=extend.none)
+        supline := line.new(x1=bar_index - rb, y1=sup, x2=bar_index, y2=sup, color=supcol, extend=extend.right, style=srlinestyle, width=srlinewidth)
+        supline
+
+iff_4 = trend == 1 ? bcolup : bcoldn
+barcolor(color=changebarcol ? iff_4 : na)
+
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                              ║
+// ║     main finish (higher high)                                          ║
+// ║                                                                              ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
 
 
 // ╔══════════════════════════════════════════════════════════════════════════════╗
