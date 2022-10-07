@@ -1,11 +1,66 @@
-// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
-// © husseyingulen
-
 //@version=5
-indicator(title="HG - MACDAS + RSI Screener", format=format.price, precision=2)
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                              ║
+// ║ © www.huseyingulen.net                                                       ║
+// ║                                                                              ║
+// ║ MACDAS                                                                       ║
+// ║ Multi Timeframe RSI Screener                                                 ║
+// ║                                                                              ║
+// ║ developer : husseyingulen                                                    ║    
+// ║ creators  : danube, noop42                                                   ║
+// ║                                                                              ║
+// ║ This source code is subject to the terms of the Mozilla Public License 2.0   ║
+// ║ at https://mozilla.org/MPL/2.0/                                              ║
+// ║                                                                              ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
 
 
-/////////////////////////// macdas baslangic
+// ╔══════════════════════════════════════╗
+// ║                                      ║
+// ║     colors                           ║
+// ║                                      ║
+// ╚══════════════════════════════════════╝
+
+
+// v3 Style Gradient
+GRN01 = #7CFC00, GRN02 = #32CD32, GRN03 = #228B22, GRN04 = #006400, GRN05 = #008000, GRN06=#093507
+RED01 = #FF4500, RED02 = #FF0000, RED03 = #B22222, RED04 = #8B0000, RED05 = #800000, RED06=#330d06
+
+// ──────────[ v3 Style Colors ]
+AQUA    = #00FFFF
+BLACK   = #000000
+BLUE    = #0000FF
+FUCHSIA = #FF00FF
+GRAY    = #808080
+GREEN   = #008000
+LIME    = #00FF00
+MAROON  = #800000
+NAVY    = #000080
+OLIVE   = #808000
+ORANGE  = #FF7F00
+PURPLE  = #800080
+RUBI    = #FF0000
+SILVER  = #C0C0C0
+TEAL    = #008080
+YELLOW  = #FFFF00
+WHITE   = #FFFFFF 
+
+// ╔══════════════════════════════════════╗
+// ║                                      ║
+// ║     indicator functions              ║
+// ║                                      ║
+// ╚══════════════════════════════════════╝
+
+
+indicator(title="MACDAS - Multi RSI Screener", format=format.price, precision=2)
+
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                              ║
+// ║     main start (macdas)                                                      ║
+// ║                                                                              ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
 
 fastperiod = input.int(12, title='fastperiod', minval=1, maxval=500, group='=== MACDAS SETTINGS ===')
 slowperiod = input.int(26, title='slowperiod', minval=1, maxval=500, group='=== MACDAS SETTINGS ===')
@@ -16,28 +71,36 @@ macd = fastMA - slowMA
 signal = ta.ema(macd, signalperiod)
 macdAS = macd - signal
 signalAS = ta.ema(macdAS, signalperiod)
-spanColor = macdAS >= signalAS ? color.rgb(255, 255, 255) : color.rgb(171, 71, 188)
+spanColor = macdAS >= signalAS ? color.rgb(0, 226, 255) : color.rgb(242, 54, 69)
 p1 = plot(macdAS, title='macdAS', style=plot.style_histogram, linewidth=1, color=spanColor)
 p2 = plot(signalAS, title='signalAS', style=plot.style_histogram, linewidth=1, color=spanColor)
 plot(0, color=color.new(color.silver, 0), linewidth=3)
 long = ta.crossover(macdAS, signalAS)
 short = ta.crossunder(macdAS, signalAS)
-plotshape(long, title='Long', color=color.new(#ffffff, 20), style=shape.triangleup, location=location.bottom, size=size.small)
-plotshape(short, title='Short', color=color.new(#ab47bc, 20), style=shape.triangledown, location=location.top, size=size.small)
+plotshape(long, title='Long', color=color.new(#00e2ff, 20), style=shape.triangleup, location=location.bottom, size=size.small)
+plotshape(short, title='Short', color=color.new(#f23645, 20), style=shape.triangledown, location=location.top, size=size.small)
 fill(p1, p2, color=spanColor, title='Fill', transp=20)
 alertcondition(long or short, title='Signal Alert', message='SIGNAL')
 alertcondition(long, title='Long Alert', message='Long')
 alertcondition(short, title='Short Alert', message='Short')
 
-/////////////////////////// macdas bitis
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                              ║
+// ║     main finish (macdas)                                                     ║
+// ║                                                                              ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
 
 
-/////////////////////////// rsi screener baslama
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                              ║
+// ║     main start (rsi screener)                                                ║
+// ║                                                                              ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
 
 // Input parameters
 src = input(close, title='Source')
 repainting = input.bool(title='Allow repaint ? (enabled = live values)', defval=true, group='=== RSI SCREENER SETTINGS ===')
-show_screener = input.bool(title='Show Screener', defval=true, group='=== RSI SCREENER SETTINGS ===')
+show_screener = input.bool(title='Show Screener', defval=false, group='=== RSI SCREENER SETTINGS ===')
 show_lines = input.bool(title='Show RSI lines ?', defval=false, group='=== RSI SCREENER SETTINGS ===')
 
 tf1 = input.timeframe(title='Timeframe 1', defval='5', group='=== RSI SCREENER SETTINGS ===')
@@ -165,4 +228,15 @@ plot(show_drawings(rsi_tf4), 'RSI #4', color=tf4RSIColor, linewidth=4, transp=80
 plotshape(show_drawings(rsi_os_convergence) ? 1 : 0, color=color.new(bullColor, 0), location=location.bottom, size=size.tiny, style=shape.triangleup, title='Bullish movement')
 plotshape(show_drawings(rsi_ob_convergence) ? 1 : 0, color=color.new(bearColor, 0), location=location.top, size=size.tiny, style=shape.triangledown, title='Bearish movement')
 
-/////////////////////////// rsi screener bitis
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                              ║
+// ║     main finish (rsi screener)                                               ║
+// ║                                                                              ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                              ║
+// ║                That's all Folks !                                            ║
+// ║                                                                              ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
