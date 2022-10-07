@@ -1,11 +1,65 @@
-// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
-// © husseyingulen
-
 //@version=5
-indicator(title='LaykaDAO-3 - Wedge/Flag Finder + Cup Finder', shorttitle='LaykaDAO-3', overlay=true, max_bars_back=500)
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                              ║
+// ║ © www.huseyingulen.net                                                       ║
+// ║                                                                              ║
+// ║ Wedge Flag Finder                                                            ║
+// ║ Cup Finder                                                                   ║
+// ║                                                                              ║
+// ║ developer : husseyingulen                                                    ║    
+// ║ creators  : HeWhoMustNotBeNamed, LonesomeTheBlue				              ║
+// ║                                                                              ║
+// ║ This source code is subject to the terms of the Mozilla Public License 2.0   ║
+// ║ at https://mozilla.org/MPL/2.0/                                              ║
+// ║                                                                              ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
 
 
-/////////////////////////// wedge and flag finderbaslama 
+// ╔══════════════════════════════════════╗
+// ║                                      ║
+// ║     colors                           ║
+// ║                                      ║
+// ╚══════════════════════════════════════╝
+
+
+// v3 Style Gradient
+GRN01 = #7CFC00, GRN02 = #32CD32, GRN03 = #228B22, GRN04 = #006400, GRN05 = #008000, GRN06=#093507
+RED01 = #FF4500, RED02 = #FF0000, RED03 = #B22222, RED04 = #8B0000, RED05 = #800000, RED06=#330d06
+
+// ──────────[ v3 Style Colors ]
+AQUA    = #00FFFF
+BLACK   = #000000
+BLUE    = #0000FF
+FUCHSIA = #FF00FF
+GRAY    = #808080
+GREEN   = #008000
+LIME    = #00FF00
+MAROON  = #800000
+NAVY    = #000080
+OLIVE   = #808000
+ORANGE  = #FF7F00
+PURPLE  = #800080
+RUBI    = #FF0000
+SILVER  = #C0C0C0
+TEAL    = #008080
+YELLOW  = #FFFF00
+WHITE   = #FFFFFF 
+
+// ╔══════════════════════════════════════╗
+// ║                                      ║
+// ║     indicator functions              ║
+// ║                                      ║
+// ╚══════════════════════════════════════╝
+
+
+indicator(title='Wedge/Flag Finder - Cup Finder', overlay=true, max_bars_back=500)
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                              ║
+// ║     main start (wedge flag finder)                                           ║
+// ║                                                                              ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
 
 import HeWhoMustNotBeNamed/zigzag/14 as zg
 import HeWhoMustNotBeNamed/enhanced_ta/14 as eta
@@ -299,11 +353,18 @@ if(showZigZag4)
     lastABar := scan_patterns(startIndex+1, doublePivot, zigzagpivots, zigzagpivotbars, zigzagpivotratios, zigzagpivotdirs, lastABar)
     lastABar := scan_patterns(startIndex, newPivot, zigzagpivots, zigzagpivotbars, zigzagpivotratios, zigzagpivotdirs, lastABar)
 
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                              ║
+// ║     main finish (wedge flag finder)                                          ║
+// ║                                                                              ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
 
-/////////////////////////// wedge and flag finderbitis
 
-
-/////////////////////////// cup finder baslangic
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                              ║
+// ║     main start (cup finder)                                                  ║
+// ║                                                                              ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
 
 loopback = input.int(defval=150, title='Number of Bars to search', minval=30, maxval=250, group='=== CUP FINDER SETTINGS ===')
 widthr = input.float(defval=5., title='Channel Width of the Cup', minval=1, group='=== CUP FINDER SETTINGS ===')
@@ -416,4 +477,15 @@ alertcondition(bullish_cup, title='Bullish Cup Found', message='Bullish Cup Foun
 alertcondition(bearish_cup, title='Bearish Cup Found', message='Bearish Cup Found, Included:{{plot("included")}}')
 alertcondition(bullish_cup or bearish_cup, title='Cup Found', message='Cup Found, Included:{{plot("included")}}')
 
-/////////////////////////// cup finder bitiss
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                              ║
+// ║     main finish (cup finder)                                                 ║
+// ║                                                                              ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                                                                              ║
+// ║                That's all Folks !                                            ║
+// ║                                                                              ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
