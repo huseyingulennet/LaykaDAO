@@ -251,7 +251,7 @@ var is_dailyrange_enabled = input.bool(defval=true, title='Prev H/L', group='Dai
 var is_dailym_enabled = input.bool(defval=false, title='Prev Mid', group='Daily', inline='Daily')
 DailyTextType = input.bool(defval=false, title='ShortHand', group='Daily', inline='Dailysh')
 
-var is_monday_enabled = input.bool(defval=true, title='Range', group='Monday Range', inline='Monday')
+var is_monday_enabled = input.bool(defval=false, title='Range', group='Monday Range', inline='Monday')
 var is_monday_mid = input.bool(defval=false, title='Mid', group='Monday Range', inline='Monday')
 var untested_monday = false
 MondayTextType = input.bool(defval=false, title='ShortHand', group='Monday Range', inline='Mondaysh')
@@ -290,7 +290,7 @@ Asiat = input.session("0000-0900", "Tokyo Session")
 DailyColor = input.color(title='', defval=#000000, group='Daily', inline='Dailysh')
 MondayColor = input.color(title='', defval=#000000, group='Monday Range', inline='Mondaysh')
 WeeklyColor = input.color(title='', defval=#000000, group='Weekly', inline='Weeklysh')
-MonthlyColor = input.color(title='', defval=#2196F3, group='Monthly', inline='Monthlysh')
+MonthlyColor = input.color(title='', defval=#f23645, group='Monthly', inline='Monthlysh')
 YearlyColor = input.color(title='', defval=color.red, group='Yearly', inline='Yearlysh')
 quarterlyColor = input.color(title='', defval=#FF9800, group='Quarterly', inline='Quarterlysh')
 IntraColor = input.color(title='', defval=color.orange, group='4H', inline='4Hsh')
