@@ -7,8 +7,8 @@
 // ║ Wedge Flag Finder                                                            ║
 // ║ Cup Finder                                                                   ║
 // ║                                                                              ║
-// ║ developer : husseyingulen                                                    ║    
-// ║ creators  : HeWhoMustNotBeNamed, LonesomeTheBlue				              ║
+// ║ developer : husseyingulen                                                    ║
+// ║ creators  : HeWhoMustNotBeNamed, LonesomeTheBlue				                      ║
 // ║                                                                              ║
 // ║ This source code is subject to the terms of the Mozilla Public License 2.0   ║
 // ║ at https://mozilla.org/MPL/2.0/                                              ║
@@ -44,7 +44,7 @@ RUBI    = #FF0000
 SILVER  = #C0C0C0
 TEAL    = #008080
 YELLOW  = #FFFF00
-WHITE   = #FFFFFF 
+WHITE   = #FFFFFF
 
 // ╔══════════════════════════════════════╗
 // ║                                      ║
@@ -156,7 +156,7 @@ f_angle(a, b, loopback) =>
     rad2degree = 180 / math.pi
     ang = rad2degree * math.atan((a - b)/(2*math.sum(ta.tr, loopback+1)/(loopback+1)))
     ang
-    
+
 
 add_new_wedge(a,b,c,d,e,f,aBar,bBar,cBar,dBar,eBar,fBar,l1Angle, l2Angle, zgColor, wedgeSize=5)=>
     dir = a>b? 1: -1
@@ -173,7 +173,7 @@ add_new_wedge(a,b,c,d,e,f,aBar,bBar,cBar,dBar,eBar,fBar,l1Angle, l2Angle, zgColo
         bc = line.new(cBar, c, bBar, b)
         cd = line.new(dBar, d, cBar, c)
         de = line.new(eBar, e, dBar, d)
-        
+
         aLbl = label.new(aBar, a, '5', style=label.style_none, yloc=dir>0?yloc.abovebar:yloc.belowbar, textcolor=zgColor)
         bLbl = label.new(bBar, b, '4', style=label.style_none, yloc=dir<0?yloc.abovebar:yloc.belowbar, textcolor=zgColor)
         cLbl = label.new(cBar, c, '3', style=label.style_none, yloc=dir>0?yloc.abovebar:yloc.belowbar, textcolor=zgColor)
@@ -182,12 +182,12 @@ add_new_wedge(a,b,c,d,e,f,aBar,bBar,cBar,dBar,eBar,fBar,l1Angle, l2Angle, zgColo
         if(wedgeSize == 6)
             ef = line.new(fBar, f, eBar, e)
             fLbl = label.new(fBar, f, '0', style=label.style_none, yloc=dir<0?yloc.abovebar:yloc.belowbar, textcolor=zgColor)
-    
+
 
 wedgeLine(l1StartX, l1StartY, l1EndX, l1EndY, l2StartX, l2StartY, l2EndX, l2EndY, zgColor)=>
     l1t = line.new(l1StartX, l1StartY, l1EndX, l1EndY, color=zgColor, extend=extend.both)
     l2t = line.new(l2StartX, l2StartY, l2EndX, l2EndY, color=zgColor, extend=extend.both)
-    
+
     startBar = math.min(l2StartX, l1StartX)
     endBar = l1EndX
     l1Start = line.get_price(l1t, startBar)
@@ -201,20 +201,20 @@ wedgeLine(l1StartX, l1StartY, l1EndX, l1EndY, l2StartX, l2StartY, l2EndX, l2EndY
     line.set_y1(l1t, l1Start)
     line.set_x2(l1t, endBar)
     line.set_y2(l1t, l1End)
-    
+
     line.set_x1(l2t, startBar)
     line.set_y1(l2t, l2Start)
     line.set_x2(l2t, endBar)
     line.set_y2(l2t, l2End)
-    
+
     l1Angle = f_angle(l1End, l1Start, endBar-startBar)
     l2Angle = f_angle(l2End, l2Start, endBar-startBar)
-    
+
     l1Diff = math.abs(l1Start-l1End)
     l2Diff = math.abs(l2Start-l2End)
-        
+
     [l1t, l2t, l1Angle, l2Angle, l1Diff, l2Diff]
-    
+
 find_wedge(a,b,c,d,e,f,aBar,bBar,cBar,dBar,eBar,fBar,zigzagpivots, zigzagpivotbars, fIndex, wedgeSize=6)=>
     existingPattern = false
     lastPivot = wedgeSize == 6? f : e
@@ -227,11 +227,11 @@ find_wedge(a,b,c,d,e,f,aBar,bBar,cBar,dBar,eBar,fBar,zigzagpivots, zigzagpivotba
                          (array.get(dBarArray, i) == dBar ? 1 : 0) +
                          (array.get(eBarArray, i) == eBar ? 1 : 0) +
                          (wedgeSize == 6 and array.get(fBarArray, i) == fBar ? 1 : 0)
-        
+
         if(commonPivots >=2) or (avoidOverlap and lastPivotBar < array.get(aBarArray,i) and lastPivotBar > array.get(fBarArray, i))
             existingPattern := true
             break
-    
+
     if(not existingPattern)
         aRatio = math.abs(a-b)/math.abs(b-c)
         bRatio = math.abs(b-c)/math.abs(c-d)
@@ -240,15 +240,15 @@ find_wedge(a,b,c,d,e,f,aBar,bBar,cBar,dBar,eBar,fBar,zigzagpivots, zigzagpivotba
 
         zgColor = array.pop(themeColors)
         [l1t, l2t, l1Angle, l2Angle, l1Diff, l2Diff] = wedgeLine(eBar, e, aBar, a, wedgeSize == 6?fBar:dBar, wedgeSize == 6?f:d, bBar, b, zgColor)
-        
+
         isType1Wedge = aRatio >=1 and bRatio < 1 and cRatio >= 1 and (dRatio < 1 or wedgeSize==5) and l1Diff < l2Diff
         isType2Wedge = aRatio <1 and bRatio >= 1 and cRatio < 1 and (dRatio >=1 or wedgeSize==5) and l1Diff > l2Diff
-        
+
         angleDiff = math.abs(l1Angle-l2Angle)
         angleDiffInRange = (angleDiff >= minAngleDiff and angleDiff <= maxAngleDiff) or not applyAngleDiff
         angleInRange = (math.max(math.abs(l1Angle), math.abs(l2Angle)) >= minAngleRange and math.min(math.abs(l1Angle), math.abs(l2Angle)) <= maxAngleRange) or not applyAngleLimit
         isWedge = (isType1Wedge or isType2Wedge) and angleDiffInRange and angleInRange
-        
+
         if(isWedge)
             for i = aBar to lastPivotBar
                 l = low[bar_index-i]
@@ -275,9 +275,9 @@ find_wedge(a,b,c,d,e,f,aBar,bBar,cBar,dBar,eBar,fBar,zigzagpivots, zigzagpivotba
                 xIndex = array.get(xIndexes, i)
                 x = array.get(zigzagpivots, xIndex)
                 xBar = array.get(zigzagpivotbars, xIndex)
-            
+
                 flagRatio = math.abs(lastPivot-line.get_price(wedgeSize == 6?l1t:l2t, lastPivotBar))/math.abs(x-lastPivot)
-                
+
                 isFlag := flagRatio < 0.618 and (lastPivot-x)/math.abs(lastPivot-x) == (lastPivot-(wedgeSize == 6?b:a))/math.abs(lastPivot-(wedgeSize == 6?b:a))
                 if(isFlag)
                     lFlag = line.new(xBar, x, lastPivotBar, lastPivot, color=zgColor, extend=extend.none)
@@ -287,7 +287,7 @@ find_wedge(a,b,c,d,e,f,aBar,bBar,cBar,dBar,eBar,fBar,zigzagpivots, zigzagpivotba
             if(not isFlag)
                 dir = lastPivot > llastPivot? 1 : -1
                 label.new(fBar, f, 'Wedge', style=dir>0?label.style_label_down:label.style_label_up, yloc=yloc.price, color=zgColor, textcolor=color.black)
-            
+
             alert('New '+(isFlag?'Flag':'Wedge')+' pattern found')
             array.unshift(themeColors, zgColor)
             true
@@ -296,7 +296,7 @@ find_wedge(a,b,c,d,e,f,aBar,bBar,cBar,dBar,eBar,fBar,zigzagpivots, zigzagpivotba
             line.delete(l2t)
             array.push(themeColors, zgColor)
             false
-            
+
 scan_patterns(startIndex, newPivot, zigzagpivots, zigzagpivotbars, zigzagpivotratios, zigzagpivotdirs, lastABar)=>
     length = array.size(zigzagpivots)
     numberOfPivots=5

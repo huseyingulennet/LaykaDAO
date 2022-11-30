@@ -10,7 +10,7 @@
 // ║ Imbalance                                                                    ║
 // ║ Higher High                                                                  ║
 // ║                                                                              ║
-// ║ developer : husseyingulen                                                    ║    
+// ║ developer : husseyingulen                                                    ║
 // ║ creators  : mrsebqstianc, spaceman, glaz, travelling_trader,                 ║
 // ║             LonesomeThecolor.blue                                            ║
 // ║                                                                              ║
@@ -48,7 +48,7 @@ RUBI    = #FF0000
 SILVER  = #C0C0C0
 TEAL    = #008080
 YELLOW  = #FFFF00
-WHITE   = #FFFFFF 
+WHITE   = #FFFFFF
 
 // ╔══════════════════════════════════════╗
 // ║                                      ║
@@ -66,16 +66,16 @@ indicator(title='MA Cross - RSI Candle - Key Levels - Imbalance - Higher High', 
 // ║                                                                              ║
 // ╚══════════════════════════════════════════════════════════════════════════════╝
 
-s3 = input.string(title='MA Type 3', defval='na', options=['na', 'SMA', 'EMA', 'WMA', 'RMA'])
+s3 = input.string(title='MA Type 3', defval='SMA', options=['na', 'SMA', 'EMA', 'WMA', 'RMA'])
 len3 = input.int(20, minval=1, title='Length 3')
 res3 = input.timeframe(title='Resolution 3', defval='D')
 src3 = input(close, title='Source 3')
-s4 = input.string(title='MA Type4', defval='na', options=['na', 'SMA', 'EMA', 'WMA', 'RMA'])
+s4 = input.string(title='MA Type4', defval='SMA', options=['na', 'SMA', 'EMA', 'WMA', 'RMA'])
 len4 = input.int(50, minval=1, title='Length 4')
 res4 = input.timeframe(title='Resolution 4', defval='D')
 src4 = input(close, title='Source 4')
 s5 = input.string(title='MA Type 5', defval='SMA', options=['na', 'SMA', 'EMA', 'WMA', 'RMA'])
-len5 = input.int(200, minval=1, title='Length 5')
+len5 = input.int(200, minval=2, title='Length 5')
 res5 = input.timeframe(title='Resolution 5', defval='D')
 src5 = input(close, title='Source 5')
 s6 = input.string(title='MA Type6', defval='na', options=['na', 'SMA', 'EMA', 'WMA', 'RMA'])
@@ -132,7 +132,7 @@ a12 = request.security(syminfo.tickerid, res12, out12)
 
 plot(a3, color=color.new(color.red, 0))
 plot(a4, color=color.new(color.blue, 0))
-plot(a5, color=color.new(color.gray, 0))
+plot(a5, color=color.new(#000000, 0))
 plot(a6, color=color.new(color.purple, 0))
 plot(a7, color=color.new(color.orange, 0))
 plot(a8, color=color.new(color.olive, 0))
@@ -190,7 +190,7 @@ barcolor(isup() ? color.yellow : isdown_1 ? color.yellow : na)
 displayStyle = input.string(defval='Standard', title='Display Style', options=['Standard', 'Right Anchored'], inline='Display')
 mergebool = input.bool(defval=true, title='Merge Levels?', inline='Display')
 distanceright = input.int(defval=15, title='Distance', minval=5, maxval=500, inline='Dist')
-radistance = input.int(defval=50, title='Anchor Distance', minval=5, maxval=500, inline='Dist')
+radistance = input.int(defval=25, title='Anchor Distance', minval=5, maxval=500, inline='Dist')
 labelsize = input.string(defval='Medium', title='Text Size', options=['Small', 'Medium', 'Large'])
 linesize = input.string(defval='Small', title='Line Width', options=['Small', 'Medium', 'Large'], inline='Line')
 linestyle = input.string(defval='Solid', title='Line Style', options=['Solid', 'Dashed', 'Dotted'], inline='Line')
@@ -288,8 +288,8 @@ USt = input.session("1400-2100", "New York Session")
 Asiat = input.session("0000-0900", "Tokyo Session")
 
 DailyColor = input.color(title='', defval=#000000, group='Daily', inline='Dailysh')
-MondayColor = input.color(title='', defval=#da00ff, group='Monday Range', inline='Mondaysh')
-WeeklyColor = input.color(title='', defval=#2196F3, group='Weekly', inline='Weeklysh')
+MondayColor = input.color(title='', defval=#000000, group='Monday Range', inline='Mondaysh')
+WeeklyColor = input.color(title='', defval=#000000, group='Weekly', inline='Weeklysh')
 MonthlyColor = input.color(title='', defval=#2196F3, group='Monthly', inline='Monthlysh')
 YearlyColor = input.color(title='', defval=color.red, group='Yearly', inline='Yearlysh')
 quarterlyColor = input.color(title='', defval=#FF9800, group='Quarterly', inline='Quarterlysh')
@@ -585,7 +585,7 @@ if barstate.islast
         line.set_x2(londono_line, london_limit_right)
         line.set_y1(londono_line, flondonopen)
         line.set_y2(londono_line, flondonopen)
-        
+
         label.set_x(londonh_label, london_limit_right)
         label.set_y(londonh_label, flondonhigh)
         label.set_text(londonh_label, lhtext)
@@ -595,7 +595,7 @@ if barstate.islast
         label.set_x(londono_label, london_limit_right)
         label.set_y(londono_label, flondonopen)
         label.set_text(londono_label, lotext)
-        
+
         if mergebool
             f_LevelMerge(pricearray, labelarray, flondonhigh, londonh_label, LondonColor)
             f_LevelMerge(pricearray, labelarray, flondonlow, londonl_label, LondonColor)
@@ -622,18 +622,18 @@ if barstate.islast
         line.set_x2(ush_line, us_limit_right)
         line.set_y1(ush_line, fushigh)
         line.set_y2(ush_line, fushigh)
-        
+
         line.set_x1(usl_line, ustime)
         line.set_x2(usl_line, us_limit_right)
         line.set_y1(usl_line, fuslow)
         line.set_y2(usl_line, fuslow)
-        
+
         line.set_x1(uso_line, ustime)
         line.set_x2(uso_line, us_limit_right)
         line.set_y1(uso_line, fusopen)
         line.set_y2(uso_line, fusopen)
-        
-        
+
+
         label.set_x(ush_label, us_limit_right)
         label.set_y(ush_label, fushigh)
         label.set_text(ush_label, ushtext)
@@ -668,18 +668,18 @@ if barstate.islast
         line.set_x2(asiah_line, asia_limit_right)
         line.set_y1(asiah_line, fasiahigh)
         line.set_y2(asiah_line, fasiahigh)
-        
+
         line.set_x1(asial_line, asiatime)
         line.set_x2(asial_line, asia_limit_right)
         line.set_y1(asial_line, fasialow)
         line.set_y2(asial_line, fasialow)
-        
+
         line.set_x1(asiao_line, asiatime)
         line.set_x2(asiao_line, asia_limit_right)
         line.set_y1(asiao_line, fasiaopen)
         line.set_y2(asiao_line, fasiaopen)
-        
-        
+
+
         label.set_x(asiah_label, asia_limit_right)
         label.set_y(asiah_label, fasiahigh)
         label.set_text(asiah_label, asiahtext)
@@ -693,8 +693,8 @@ if barstate.islast
             f_LevelMerge(pricearray, labelarray, fasiahigh, asiah_label, AsiaColor)
             f_LevelMerge(pricearray, labelarray, fasialow, asial_label, AsiaColor)
             f_LevelMerge(pricearray, labelarray, fasiaopen, asiao_label, AsiaColor)
-//////////////////////////////////////////////////////////////////////////////////            
-            
+//////////////////////////////////////////////////////////////////////////////////
+
 //////////////////////////////////////////////////////////////////////////////////
     if can_draw_intra
         intra_limit_right = get_limit_right(DEFAULT_EXTEND_RIGHT)
@@ -763,7 +763,7 @@ if barstate.islast
         if mergebool
             f_LevelMerge(pricearray, labelarray, intral_open, intral_label, IntraColor)
 
-///////////////////////////////////////////////////////////////////////////////   
+///////////////////////////////////////////////////////////////////////////////
 
     if can_draw_intram
         intram_limit_right = get_limit_right(DEFAULT_EXTEND_RIGHT)
@@ -874,7 +874,7 @@ if barstate.islast
             f_LevelMerge(pricearray, labelarray, daily_open, daily_label, DailyColor)
 
 //////////////////////////////////////////////////////////////////////////////////
-//////////////////DAILY HIGH DAILY HIGH DAILY HIGH DAILY HIGH DAILY HIGH DAILY HIGH DAILY HIGH 
+//////////////////DAILY HIGH DAILY HIGH DAILY HIGH DAILY HIGH DAILY HIGH DAILY HIGH DAILY HIGH
 
     if is_dailyrange_enabled
         dailyh_limit_right = get_limit_right(DEFAULT_EXTEND_RIGHT)
@@ -899,7 +899,7 @@ if barstate.islast
 
 
 //////////////////////////////////////////////////////////////////////////////////
-//////////////////DAILY LOW DAILY LOW DAILY LOW DAILY LOW DAILY LOW DAILY LOW DAILY LOW DAILY LOW 
+//////////////////DAILY LOW DAILY LOW DAILY LOW DAILY LOW DAILY LOW DAILY LOW DAILY LOW DAILY LOW
 
     if is_dailyrange_enabled
         dailyl_limit_right = get_limit_right(DEFAULT_EXTEND_RIGHT)
@@ -1399,7 +1399,7 @@ tf = timeframe.isdaily ? 1440 : (timeframe.isweekly ? 1440*7 : (timeframe.ismont
 reqDate = timenow - 199999999*timeframe.multiplier*tf
 Imbcol = input.color(imb, 'Imbalance Color', inline="1" ,group='=== Information ===')
 Imbcol_tested = input.color(imb_tested, 'Mitigated Imbalance', inline="2" ,group='=== Information ===')
-imb_extend = input.bool(true, "Auto-extend Untested imbalance",group='=== Information ===')
+imb_extend = input.bool(false, "Auto-extend Untested imbalance",group='=== Information ===')
 TopImbalance = low[2] <= open[1] and high[0] >= close[1]
 TopImbalancesize = low[2] - high[0]
 if TopImbalance and TopImbalancesize > 0 and time >= reqDate
@@ -1426,8 +1426,8 @@ if barstate.isconfirmed
             if imb_extend
                 box.set_right(tbox, bar_index)
             if high > top
-                box.set_bgcolor(tbox, Imbcol_tested)  
-                if imb_extend 
+                box.set_bgcolor(tbox, Imbcol_tested)
+                if imb_extend
                     box.set_right(tbox, ago+1)
                 array.remove(top_boxes, i)
                 continue
@@ -1448,8 +1448,8 @@ if barstate.isconfirmed
                 if not matched
                     BOX3 = box.copy(tbox)
                     box.set_top(BOX3, high)
-                    box.set_bgcolor(BOX3, Imbcol_tested) 
-                    if imb_extend  
+                    box.set_bgcolor(BOX3, Imbcol_tested)
+                    if imb_extend
                         box.set_right(BOX3, ago+1)
                     array.push(tested_obs, BOX3)
                     box.set_bottom(tbox, high)
@@ -1462,10 +1462,10 @@ if barstate.isconfirmed
             ago = box.get_left(tbox)
             if imb_extend
                 box.set_right(tbox, bar_index)
-            if low < bottom 
-                box.set_bgcolor(tbox, Imbcol_tested) 
+            if low < bottom
+                box.set_bgcolor(tbox, Imbcol_tested)
                 if imb_extend
-                    box.set_right(tbox, ago+1)  
+                    box.set_right(tbox, ago+1)
                 array.remove(bottom_boxes, i)
                 continue
             if low < top //and ago < 5000
@@ -1483,9 +1483,9 @@ if barstate.isconfirmed
                 if not matched
                     BOX4 = box.copy(tbox)
                     box.set_bottom(BOX4, low)
-                    box.set_bgcolor(BOX4, Imbcol_tested)  
+                    box.set_bgcolor(BOX4, Imbcol_tested)
                     if imb_extend
-                        box.set_right(BOX4, ago+1) 
+                        box.set_right(BOX4, ago+1)
                     array.push(tested_obs, BOX4)
                     box.set_top(tbox, low)
 
@@ -1498,7 +1498,7 @@ if barstate.isconfirmed
 
 // ╔══════════════════════════════════════════════════════════════════════════════╗
 // ║                                                                              ║
-// ║     main start (higher high)                                          ║
+// ║     main start (higher high)                                                 ║
 // ║                                                                              ║
 // ╚══════════════════════════════════════════════════════════════════════════════╝
 
@@ -1506,8 +1506,8 @@ lb = input.int(5, title='Left Bars', minval=1)
 rb = input.int(5, title='Right Bars', minval=1)
 showsupres = input.bool(true, title='Support/Resistance', inline='srcol')
 supcol = input.color(color.lime, title='', inline='srcol')
-rescol = input.color(color.red, title='', inline='srcol')
-srlinestyle = input.string(line.style_dotted, title='Line Style/Width', options=[line.style_solid, line.style_dashed, line.style_dotted], inline='style')
+rescol = input.color(color.rgb(255, 1, 1), title='', inline='srcol')
+srlinestyle = input.string(line.style_solid, title='Line Style/Width', options=[line.style_solid, line.style_dashed, line.style_dotted], inline='style')
 srlinewidth = input.int(1, title='', minval=1, maxval=5, inline='style')
 changebarcol = input.bool(false, title='Change Bar Color', inline='bcol')
 bcolup = input.color(color.blue, title='', inline='bcol')
@@ -1625,7 +1625,7 @@ barcolor(color=changebarcol ? iff_4 : na)
 
 // ╔══════════════════════════════════════════════════════════════════════════════╗
 // ║                                                                              ║
-// ║     main finish (higher high)                                          ║
+// ║     main finish (higher high)                                                ║
 // ║                                                                              ║
 // ╚══════════════════════════════════════════════════════════════════════════════╝
 
