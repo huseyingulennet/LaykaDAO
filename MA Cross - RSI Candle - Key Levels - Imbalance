@@ -57,7 +57,7 @@ WHITE   = #FFFFFF
 // ╚══════════════════════════════════════╝
 
 
-indicator(title='MA Cross - RSI Candle - Key Levels - Imbalance - Higher High', overlay=true, max_lines_count=500, max_boxes_count=500)
+indicator(title='MA Cross - RSI Candle - Key Levels - Imbalance', overlay=true, max_lines_count=500, max_boxes_count=500)
 
 
 // ╔══════════════════════════════════════════════════════════════════════════════╗
